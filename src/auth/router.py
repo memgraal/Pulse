@@ -10,7 +10,7 @@ router = APIRouter(
 
 @router.post("/login")
 def loggining(user: UserLoginCredentials) -> dict:
-    ...
+    ...    
 
 
 @router.post("/register")
