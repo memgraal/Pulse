@@ -25,11 +25,18 @@ async def loggining(userCreds: UserLoginCredentialsSchema, session: SessionDep) 
     
     if user and verify_password(userCreds.password, user.password):
         token = security.create_access_token(uid=user.id, username=user.name)
-        return {"status": "success"}
+        return {"access_token": token}
     
     raise HTTPException(status_code=401, detail="Incorrect credentials")
     
     
 @router.post("/register")
-def register(userCreds: UserRegistrationCredentialsSchema, session: SessionDep) -> dict:
-    ...
+async def register(userCreds: UserRegistrationCredentialsSchema, session: SessionDep) -> dict:
+    result = await session.execute(
+        select(UsersModel).where(
+            UsersModel.email == userCreds.email
+        )
+    )
+    
+    if not result.first():
+        ...
