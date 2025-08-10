@@ -14,6 +14,6 @@ class UserRegistrationCredentialsSchema(BaseModel):
     email: EmailStr
     password: SecretStr
     date_of_registration: date
-
+    
     model_config = ConfigDict(extra="forbid")
 
