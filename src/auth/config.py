@@ -5,9 +5,10 @@ import os
 
 load_dotenv()
 
-config = AuthXConfig()
+config = AuthXConfig(
+     JWT_ALGORITHM = "HS256",
+     JWT_SECRET_KEY = os.getenv("sec_key"),
+     JWT_TOKEN_LOCATION = ["headers"],
+)
 
-config.JWT_SECRET_KEY = os.getenv("sec_key")
-
-authx = AuthX(config)
-
+security = AuthX(config=config)

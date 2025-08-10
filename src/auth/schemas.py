@@ -2,14 +2,14 @@ from pydantic import ConfigDict, BaseModel, EmailStr, SecretStr
 from datetime import date
 
 
-class UserLoginCredentials(BaseModel):
+class UserLoginCredentialsSchema(BaseModel):
     email: EmailStr
     password: SecretStr
 
     model_config = ConfigDict(extra="forbid")
 
 
-class UserRegistrationCredentials(BaseModel):
+class UserRegistrationCredentialsSchema(BaseModel):
     username: str
     email: EmailStr
     password: SecretStr
