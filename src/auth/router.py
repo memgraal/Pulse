@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, status
 from sqlalchemy import select
 
 from .schemas import UserLoginCredentialsSchema, UserRegistrationCredentialsSchema
@@ -27,7 +27,7 @@ async def loggining(userCreds: UserLoginCredentialsSchema, session: SessionDep) 
         token = security.create_access_token(uid=user.id, username=user.name)
         return {"access_token": token}
     
-    raise HTTPException(status_code=401, detail="Incorrect credentials")
+    raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Incorrect credentials")
     
     
 @AuthRouter.post("/register")
@@ -52,4 +52,4 @@ async def register(userCreds: UserRegistrationCredentialsSchema, session: Sessio
         token = security.create_access_token(uid=str(new_user.id), username=new_user.name)
         return {"access_token": token}
     
-    raise HTTPException(status_code=409, detail="User with this email already exists")
+    raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="User with this email already exists")
