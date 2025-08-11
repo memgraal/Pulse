@@ -11,6 +11,7 @@ class UserLoginCredentialsSchema(BaseModel):
 
 class UserRegistrationCredentialsSchema(BaseModel):
     username: str
+    display_name: str
     email: EmailStr
     password: SecretStr
     date_of_registration: date
