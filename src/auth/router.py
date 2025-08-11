@@ -24,7 +24,7 @@ async def loggining(userCreds: UserLoginCredentialsSchema, session: SessionDep) 
     user = result.scalars().first()
     
     if user and verify_password(userCreds.password, user.password):
-        token = security.create_access_token(uid=user.id, username=user.name)
+        token = security.create_access_token(uid=str(user.id), username=user.name)
         return {"access_token": token}
     
     raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Incorrect credentials")
