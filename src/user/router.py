@@ -2,9 +2,9 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from auth.config import security
 
 
-UserRouter =APIRouter(
+UserRouter = APIRouter(
     prefix="/user",
-    tags=['UserProfile'],   
+    tags=["UserProfile"],
 )
 
 
@@ -12,7 +12,8 @@ UserRouter =APIRouter(
 async def get_user_profile(token: str = Depends()) -> dict:
     try:
         security.verify_token(token)
-        return {"message": "User profile data"} # временный пример (сделать после слияния ветки feaature-database и user-registration)
+        return {
+            "message": "User profile data"
+        }  # временный пример (сделать после слияния ветки feaature-database и user-registration)
     except Exception as e:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail=str(e))
-    

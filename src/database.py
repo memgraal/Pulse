@@ -23,6 +23,7 @@ async def get_session():
 class Base(DeclarativeBase):
     pass
 
+
 # Таблица пользователей
 class UsersModel(Base):
     __tablename__ = "users"
@@ -37,7 +38,10 @@ class UsersModel(Base):
 
     email: Mapped[str] = mapped_column(String, nullable=False)
     password: Mapped[str] = mapped_column(String, nullable=False)
-    registred_at: Mapped[datetime.datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    registred_at: Mapped[datetime.datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now()
+    )
+
 
 # Таблица постов
 class PostModel(Base):
@@ -54,27 +58,41 @@ class PostModel(Base):
     likes: Mapped[int] = mapped_column(Integer, nullable=True)
     dislikes: Mapped[int] = mapped_column(Integer, nullable=True)
 
-    created_at: Mapped[datetime.datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    created_at: Mapped[datetime.datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now()
+    )
+
 
 # Таблицы чатов
+
 
 class ChatModel(Base):
     __tablename__ = "chats"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    type: Mapped[str] = mapped_column(String, nullable=False) # private or group
+    type: Mapped[str] = mapped_column(String, nullable=False)  # private or group
     group_pic: Mapped[bytes] = mapped_column(LargeBinary, nullable=True)
     title: Mapped[str] = mapped_column(String, nullable=False)
     description: Mapped[str] = mapped_column(String, nullable=True)
-    created_at: Mapped[datetime.datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    created_at: Mapped[datetime.datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now()
+    )
+
 
 class ChatMemberModel(Base):
     __tablename__ = "chat_members"
 
-    chat_id: Mapped[int] = mapped_column(Integer, ForeignKey("chats.id"), primary_key=True)
-    user_id: Mapped[int] = mapped_column(Integer, ForeignKey("users.id"), primary_key=True)
-    role: Mapped[str] = mapped_column(String, nullable=False) # owner, member, admin
-    joined: Mapped[datetime.datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    chat_id: Mapped[int] = mapped_column(
+        Integer, ForeignKey("chats.id"), primary_key=True
+    )
+    user_id: Mapped[int] = mapped_column(
+        Integer, ForeignKey("users.id"), primary_key=True
+    )
+    role: Mapped[str] = mapped_column(String, nullable=False)  # owner, member, admin
+    joined: Mapped[datetime.datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now()
+    )
+
 
 class MessageModel(Base):
     __tablename__ = "messages"
@@ -84,18 +102,26 @@ class MessageModel(Base):
     sender_id: Mapped[int] = mapped_column(Integer, ForeignKey("users.id"))
     text: Mapped[str] = mapped_column(String, nullable=True)
     file_id: Mapped[int] = mapped_column(Integer, nullable=True)
-    reply_to: Mapped[int] = mapped_column(Integer, ForeignKey('messages.id'),nullable=True)
-    created_at: Mapped[datetime.datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    reply_to: Mapped[int] = mapped_column(
+        Integer, ForeignKey("messages.id"), nullable=True
+    )
+    created_at: Mapped[datetime.datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now()
+    )
     is_edited: Mapped[bool] = mapped_column(Boolean, nullable=True)
+
 
 class ChatFileModel(Base):
     __tablename__ = "chat_files"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     file: Mapped[bytes] = mapped_column(LargeBinary, nullable=False)
-    uploaded_by: Mapped[int] = mapped_column(Integer, ForeignKey("users.id"), nullable=False)
-    uploaded_at: Mapped[datetime.datetime] = mapped_column(DateTime(timezone=True), nullable=True)
-
+    uploaded_by: Mapped[int] = mapped_column(
+        Integer, ForeignKey("users.id"), nullable=False
+    )
+    uploaded_at: Mapped[datetime.datetime] = mapped_column(
+        DateTime(timezone=True), nullable=True
+    )
 
 
 async def setup_database():

@@ -10,35 +10,35 @@ from .service import verify_password, hash_password
 
 AuthRouter = APIRouter(
     prefix="/auth",
-    tags=['Athentication'],
+    tags=["Athentication"],
 )
 
 
 @AuthRouter.post("/login")
 async def loggining(userCreds: UserLoginCredentialsSchema, session: SessionDep) -> dict:
     result = await session.execute(
-        select(UsersModel).where(
-            UsersModel.email == userCreds.email
-        )
+        select(UsersModel).where(UsersModel.email == userCreds.email)
     )
     user = result.scalars().first()
-    
+
     if user and verify_password(userCreds.password, user.password):
         token = security.create_access_token(uid=str(user.id))
         return {"access_token": token}
-    
-    raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Incorrect credentials")
-    
-    
+
+    raise HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED, detail="Incorrect credentials"
+    )
+
+
 @AuthRouter.post("/register")
-async def register(userCreds: UserRegistrationCredentialsSchema, session: SessionDep) -> dict:
+async def register(
+    userCreds: UserRegistrationCredentialsSchema, session: SessionDep
+) -> dict:
     result = await session.execute(
-        select(UsersModel).where(
-            UsersModel.email == userCreds.email
-        )
+        select(UsersModel).where(UsersModel.email == userCreds.email)
     )
     user = result.scalars().first()
-    
+
     if not user:
         session.add(
             new_user := UsersModel(
@@ -46,11 +46,14 @@ async def register(userCreds: UserRegistrationCredentialsSchema, session: Sessio
                 display_name=userCreds.display_name,
                 email=userCreds.email,
                 password=hash_password(userCreds.password),
-                )
+            )
         )
         await session.commit()
-        
+
         token = security.create_access_token(uid=str(new_user.id))
         return {"access_token": token}
-    
-    raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="User with this email already exists")
+
+    raise HTTPException(
+        status_code=status.HTTP_409_CONFLICT,
+        detail="User with this email already exists",
+    )
