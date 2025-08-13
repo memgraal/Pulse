@@ -27,7 +27,9 @@ async def loggining(
 
         responce.set_cookie(
             config.JWT_ACCESS_COOKIE_NAME,
-            token := security.create_access_token(uid=str(user.id)),
+            token := security.create_access_token(
+                {"uid": str(user.id), "username": user.user_name}
+            ),
             secure=True,
         )
 
@@ -40,7 +42,9 @@ async def loggining(
 
 @AuthRouter.post("/register")
 async def register(
-    userCreds: UserRegistrationCredentialsSchema, session: SessionDep
+    userCreds: UserRegistrationCredentialsSchema,
+    session: SessionDep,
+    responce: Response,
 ) -> dict:
     result = await session.execute(
         select(UsersModel).where(UsersModel.email == userCreds.email)
@@ -58,7 +62,14 @@ async def register(
         )
         await session.commit()
 
-        token = security.create_access_token(uid=str(new_user.id))
+        responce.set_cookie(
+            config.JWT_ACCESS_COOKIE_NAME,
+            token := security.create_access_token(
+                {"uid": str(user.id), "username": user.user_name}
+            ),
+            secure=True,
+        )
+
         return {"access_token": token}
 
     raise HTTPException(
