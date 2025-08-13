@@ -1,8 +1,8 @@
-from fastapi import APIRouter, HTTPException, status
+from fastapi import APIRouter, HTTPException, status, Response
 from sqlalchemy import select
 
 from .schemas import UserLoginCredentialsSchema, UserRegistrationCredentialsSchema
-from .config import security
+from .config import security, config
 from .dependences import SessionDep
 from database import UsersModel
 from .service import verify_password, hash_password
@@ -15,14 +15,22 @@ AuthRouter = APIRouter(
 
 
 @AuthRouter.post("/login")
-async def loggining(userCreds: UserLoginCredentialsSchema, session: SessionDep) -> dict:
+async def loggining(
+    userCreds: UserLoginCredentialsSchema, session: SessionDep, responce: Response
+) -> dict:
     result = await session.execute(
         select(UsersModel).where(UsersModel.email == userCreds.email)
     )
     user = result.scalars().first()
 
     if user and verify_password(userCreds.password, user.password):
-        token = security.create_access_token(uid=str(user.id))
+
+        responce.set_cookie(
+            config.JWT_ACCESS_COOKIE_NAME,
+            token := security.create_access_token(uid=str(user.id)),
+            secure=True,
+        )
+
         return {"access_token": token}
 
     raise HTTPException(
