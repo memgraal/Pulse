@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pulse</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="script.js" defer></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nata+Sans:wght@100..900&display=swap" rel="stylesheet">
+
+<body>
+    <!-- «Сенсор» у левого края -->
+    <div class="edge-sensor" aria-hidden="true"></div>
+
+    <!-- Боковое меню -->
+    <aside class="sidebar" role="navigation">
+        <div class="sidebar-top">
+            <button data-page="home"><b>Главная</b></button>
+            <button data-page="feed">Лента</button>
+            <button data-page="chats">Чаты</button>
+            <button data-page="profile">Профиль</button>
+        </div>
+        <div class="sidebar-bottom">
+            <button>Настройки</button>
+            <button>Выход</button>
+        </div>
+    </aside>
+    
+    <header><h1>Pulse</h1></header>
+
+    <main id="content">
+        <h1>Контент страницы</h1>
+        <p>Поднеси курсор к левому краю — меню выедет.</p>
+    </main>
+</body>
+
+</html>

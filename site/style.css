@@ -1,0 +1,103 @@
+:root {
+    --sidebar-w: 240px;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: system-ui, Arial, sans-serif;
+    background-color: #3200a798;
+}
+
+header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 60px;
+    background: #222;
+    display: flex;
+    /* выравнивание через flex */
+    justify-content: center;
+    /* горизонтально по центру */
+    align-items: center;
+    /* вертикально по центру */
+    z-index: 2000;
+}
+
+header h1 {
+    color: white;
+    font-size: 24px;
+    margin: 0;
+    font-family: 'Nata Sans', sans-serif;
+    /* свой шрифт */
+}
+
+/* Узкая «зона наведения» слева */
+.edge-sensor {
+    position: fixed;
+    inset: 0 auto 0 0;
+    width: 16px;
+    height: 100vh;
+    z-index: 1000;
+}
+
+/* Боковая панель */
+.sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: var(--sidebar-w);
+    height: 100vh;
+    background: #222;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 12px;
+    transform: translateX(calc(-1 * var(--sidebar-w) + 4px));
+    /* почти спрятано */
+    transition: transform .25s ease;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, .35);
+    z-index: 9999;
+}
+
+/* Показать при наведении на сенсор или на саму панель */
+.edge-sensor:hover+.sidebar,
+.sidebar:hover {
+    transform: translateX(0);
+}
+
+.sidebar button {
+    width: 100%;
+    text-align: left;
+    background: transparent;
+    border: 0;
+    color: inherit;
+    padding: 10px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.sidebar button:hover {
+    background: rgba(255, 255, 255, .08);
+}
+
+main {
+    padding: 24px;
+    padding-top: 80px;
+}
+
+/* На тач-устройствах убираем сенсор (лучше делать кнопку-бургер) */
+@media (pointer: coarse) {
+    .edge-sensor {
+        display: none;
+    }
+
+    .sidebar {
+        transform: translateX(calc(-1 * var(--sidebar-w)));
+    }
+}
